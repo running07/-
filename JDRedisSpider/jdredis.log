@@ -1,0 +1,36 @@
+2018-12-07 11:44:15 [scrapy.utils.log] INFO: Scrapy 1.5.1 started (bot: JDRedisSpider)
+2018-12-07 11:44:15 [scrapy.utils.log] INFO: Versions: lxml 4.2.5.0, libxml2 2.9.5, cssselect 1.0.3, parsel 1.5.1, w3lib 1.19.0, Twisted 18.9.0, Python 2.7.15 (v2.7.15:ca079a3ea3, Apr 30 2018, 16:22:17) [MSC v.1500 32 bit (Intel)], pyOpenSSL 18.0.0 (OpenSSL 1.1.0j  20 Nov 2018), cryptography 2.4.2, Platform Windows-7-6.1.7601-SP1
+2018-12-07 11:44:15 [scrapy.crawler] INFO: Overridden settings: {'NEWSPIDER_MODULE': 'JDRedisSpider.spiders', 'ROBOTSTXT_OBEY': True, 'DUPEFILTER_CLASS': 'scrapy_redis.dupefilter.RFPDupeFilter', 'SPIDER_LOADER_WARN_ONLY': True, 'SPIDER_MODULES': ['JDRedisSpider.spiders'], 'AUTOTHROTTLE_ENABLED': True, 'BOT_NAME': 'JDRedisSpider', 'COOKIES_ENABLED': False, 'USER_AGENT': 'scrapy-redis (+https://github.com/rolando/scrapy-redis)', 'SCHEDULER': 'scrapy_redis.scheduler.Scheduler', 'LOG_FILE': 'jdredis.log', 'DOWNLOAD_DELAY': 1}
+2018-12-07 11:44:15 [scrapy.middleware] INFO: Enabled extensions:
+['scrapy.extensions.logstats.LogStats',
+ 'scrapy.extensions.telnet.TelnetConsole',
+ 'scrapy.extensions.corestats.CoreStats',
+ 'scrapy.extensions.throttle.AutoThrottle']
+2018-12-07 11:44:15 [jdredis] INFO: Reading start URLs from redis key 'jdspider:start_urls' (batch size: 16, encoding: utf-8
+2018-12-07 11:44:16 [scrapy.middleware] INFO: Enabled downloader middlewares:
+['scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware',
+ 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'JDRedisSpider.middlewares.JdredisSpiderAgentMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware',
+ 'JDRedisSpider.middlewares.JdredisspiderDownloaderMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+2018-12-07 11:44:16 [scrapy.middleware] INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+2018-12-07 11:44:16 [scrapy.middleware] INFO: Enabled item pipelines:
+['JDRedisSpider.pipelines.JdredisspiderPipeline',
+ 'scrapy_redis.pipelines.RedisPipeline']
+2018-12-07 11:44:16 [scrapy.core.engine] INFO: Spider opened
+2018-12-07 11:44:16 [scrapy.extensions.logstats] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+2018-12-07 11:44:16 [jdredis] INFO: Spider opened: jdredis
+2018-12-07 11:44:16 [scrapy.extensions.telnet] DEBUG: Telnet console listening on 127.0.0.1:6023
