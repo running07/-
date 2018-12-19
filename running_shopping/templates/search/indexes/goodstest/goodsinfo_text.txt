@@ -1,0 +1,3 @@
+{{ object.gtitle }}
+{{ object.ggoods_info }}
+{{ object.gstore }}

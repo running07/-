@@ -1,0 +1,213 @@
+{% extends 'base_user.html' %}
+{% block meta %}
+<meta charset="utf-8">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock meta %}
+{% block base_script %}
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+<script src="/static/js/jquery-1.11.0.min.js"></script>
+
+<script src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="/static/js/userorder.js"></script>
+<script src="/static/js/jquery.validate.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/js/messages_zh.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/additional-methods.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+
+
+{% endblock base_script %}
+{% block user_left %}
+
+<div class="left_menu_con clearfix">
+    <h3>用户中心</h3>
+    <ul>
+        <li><a href="{% url 'usertest:info' %}">· 个人信息</a></li>
+        <li><a href="{% url 'usertest:order' %}" class="active">· 全部订单</a></li>
+        <li><a href="{% url 'usertest:site' %}">· 收货地址</a></li>
+    </ul>
+</div>
+{% endblock user_left %}
+
+
+{% block user_right %}
+
+
+<div class="right_content clearfix">
+    <h3 class="common_title2">全部订单</h3>
+    <div class="sort_bar">
+        {% for item in sort_bar %}
+        {% if statu == item.id %}
+        <a href="/user/order?statu={{ item.id }}" class="active">{{ item.name }} </a>
+        {% else %}
+        <a href="/user/order?statu={{ item.id }}">{{ item.name }}</a>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% for item in page.object_list %}
+
+    <ul class="order_list_th w978 clearfix">
+        <li class="col01">{{ item.odate }}</li>
+        <li class="col02">订单号：{{ item.oid }}</li>
+        <li class="col03">地址：{{ address_list.pop }}</li>
+        <li class="col04 stress">&nbsp;&nbsp;&nbsp;{{ item.str_statu }}</li>
+    </ul>
+
+    <table class="order_list_table w980">
+        <tbody>
+        <tr>
+            <td width="55%">
+                {% for each in item.orderdetailinfo_set.all %}
+
+                <ul class="order_goods_list clearfix">
+                    <li class="col01"><a href="/detail_{{ each.goods.pk }}"><img  src="/static/media/{{ each.goods.gimage }}"></a></li>
+                    <li class="col02">{{ each.goods.gtitle }}<em>{{ each.goods.gprice }}元/{{ each.goods.gweight }}</em>
+                    </li>
+                    <li class="col03">{{ each.count }}</li>
+                    <li class="col04">{{ each.money }}元</li>
+                </ul>
+                {% endfor %}
+
+            </td>
+            <td width="15%">{{ item.omoney }}元</td>
+
+            {% if item.statu == 0 %}
+            <td width="15%">待付款</td>
+            <td width="15%"><a id="submit" href="" onclick=" submit({{ item.oid }});" class="oper_btn">去付款</a></td>
+            {% else %}
+            {% if item.statu == 1 %}
+            <td width="15%">已付款</td>
+            <td width="15%"><a href="#" onclick=" submit({{ item.oid }});" class="oper_btn">确认收货</a></td>
+            {% else %}
+            {% if item.statu == 2 %}
+
+            <td width="15%">已收货</td>
+            <td width="15%"><a data-toggle="modal" data-target="#addcomment" class="oper_btn"
+                               onclick="comment_textarea({{ item.oid }})">请添加评论</a></td>
+            {% else %}
+
+            <td width="15%">已评价</td>
+            <td width="15%"><a class="oper_btn" onclick="delete_order({{ item.oid }})">删除订单</a></td>
+            {% endif %}
+            {% endif %}
+
+            {% endif %}
+        </tr>
+        </tbody>
+    </table>
+    {% endfor %}
+
+    {% if page.object_list %}
+
+    <div class="pagenation">
+        {% if page.has_previous %}
+            <a href="/user/order?pag={{ page.previous_page_number }}&amp;statu={{ statu }}">上一页</a>
+        {% else %}
+             <a href="#" class="active2">上一页</a>
+        {% endif %}
+
+
+        {% if paginator.num_pages < 7 %}
+
+            {% for index in paginator.page_range %}
+                {% if index == page.number %}
+                    <a href="#" class="active">{{ index }}</a>
+                {% else %}
+                     <a href="/user/order?pag={{ index }}&amp;statu={{ statu }}">{{ index }}</a>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+
+            {% if page.number < 6 %}
+                {% for index in range_page %}
+                    {% if index == page.number %}
+                         <a href="#" class="active">{{ index }}</a>
+                    {% else %}
+                         <a href="/user/order?pag={{ index }}&amp;statu={{ statu }}">{{ index }}</a>
+                    {% endif %}
+                {% endfor %}
+                    <a href="#" class="active2">...</a>
+                    <a href="/user/order?pag={{ paginator.num_pages }}&amp;statu={{ statu }}">{{ paginator.num_pages }}</a>
+            {% else%}
+                {% if page.number < pagenum %}
+
+                    <a href="/user/order?pag=1&amp;statu={{ statu }}">1</a>
+                    <a href="/user/order?pag=2&amp;statu={{ statu }}">2</a>
+                    <a href="#" class="active2">...</a>
+                    {% for index in range_page2 %}
+                        {% if index == page.number %}
+                             <a href="#" class="active">{{ index }}</a>
+                        {% else %}
+                             <a href="/user/order?pag={{ index }}&amp;statu={{ statu }}">{{ index }}</a>
+                        {% endif %}
+                    {% endfor %}
+                            <a href="#" class="active">...</a>
+                            <a href="/user/order?pag={{ paginator.num_pages }}&amp;statu={{ statu }}">{{ paginator.num_pages }}</a>
+
+                {% else %}
+                    <a href="/user/order?pag=1&amp;statu={{ statu }}">1</a>
+                    <a href="/user/order?pag=2&amp;statu={{ statu }}">2</a>
+                    <a href="#" class="active2&amp;statu={{ statu }}">...</a>
+
+                    {% for index in range_page2 %}
+                        {% if index == page.number %}
+                             <a href="#" class="active">{{ index }}</a>
+                        {% else %}
+                             <a href="/user/order?pag={{ index }}&amp;statu={{ statu }}">{{ index }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endif %}
+
+        {% endif %}
+
+
+        {% if page.has_next %}
+        <a href="/user/order?pag={{ page.next_page_number }}&amp;statu={{ statu }}">下一页</a>
+        {% else %}
+        <a href="#" class="active2">下一页</a>
+        {% endif %}
+    </div>
+    {% else %}
+    <table width="60%" style="margin:100px 170px; font-size:20px ">
+        <tr>
+            <td align="center">还没有订单</td>
+        </tr>
+    </table>
+
+    {% endif %}
+    <div class="modal fade" id="addcomment">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-title">
+                    <h2 class="text-center">添加评论</h2>
+
+                </div>
+                <div class="modal-body">
+                    <form class="form-group" id="form_comment" method="post" action="/user/save_comment/">
+                        {% csrf_token %}
+                        <div id="content">
+
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock user_right %}
+

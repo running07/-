@@ -1,0 +1,228 @@
+{% extends 'base_goods.html' %}
+
+{% block goods_script %}
+
+<script type="text/javascript" src="/static/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src='/static/js/detail.js'></script>
+
+
+{% endblock goods_script %}
+
+{% block user_body %}
+
+
+<div class="breadcrumb">
+    <a href="/">全部分类</a>
+    <span>></span>
+    <a href="/list_{{ goods.gtype_id }}">{{ goods.gtype.ttitle }}</a>
+    <span>></span>
+    <a href="#">商品详情</a>
+</div>
+
+<div  class="goods_detail_con clearfix">
+    <div id="vertical" class="goods_detail_pic fl">
+        <img class="detail_image" src="/static/media/{{ goods.gimage }}"  id="midimg">
+        <div style="display:none;" id="winSelector"></div>
+    </div>
+    <div id="bigView" style="display: none;"><img width="600" height="600" alt="" src=""/></div>
+
+    <div class="goods_detail_list fr">
+        <h3>{{ goods.gtitle }}</h3>
+        <p>{{ goods.ggoods_info }}</p>
+        <div class="prize_bar">
+            <span class="show_pirze">¥<em>{{ goods.gprice }}</em></span>
+            <span class="show_unit">单  位：{{ goods.gweight }}</span>
+        </div>
+        <div class="goods_num clearfix">
+            <div class="num_name fl">数 量：</div>
+            <div class="num_add fl">
+                <input type="text" class="num_show fl" value="1">
+                <a href="javascript:add();" class="add fr">+</a>
+                <a href="javascript:reduce();" class="minus fr">-</a>
+            </div>
+        </div>
+        <div class="total">总价：<em>{{ goods.gprice }}元</em></div>
+        <div class="operate_btn">
+            <a href="" onclick="detail_order({{ goods.pk }})" class="buy_btn">立即购买</a>
+            <a class="add_cart" onclick="add_cart({{ goods.pk }})" id="add_cart">加入购物车</a>
+        </div>
+    </div>
+</div>
+
+<div class="main_wrap clearfix">
+    {% if goods_list %}
+
+    <div class="l_wrap fl clearfix">
+        <div class="new_goods">
+            <h3>店铺推荐</h3>
+            <ul>
+                {% for item in goods_list %}
+
+                <li>
+                    <a href="/detail_{{ item.pk }}"><img src="/static/media/{{ item.gimage }}" title="{{ item.gtitle }}"></a>
+                    <h4><a href="/detail_{{ item.pk }}">{{ item.gtitle }}</a></h4>
+                    <div class="prize">￥{{ item.gprice }}</div>
+                </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <div class="r_wrap fr clearfix" id="jump">
+        <ul class="detail_tab clearfix">
+            <li class="active" id="info">商品介绍</li>
+            <li class="" id="comment">评论&nbsp;{{ totalnum }}</li>
+        </ul>
+
+        <div class="tab_content">
+            <dl>
+                <dt>商品详情：</dt>
+                <dd>
+
+                    {{ goods.gintroduction|safe }}
+                </dd>
+            </dl>
+        </div>
+
+
+        <div class="discuss" id="mydiscuss">
+
+            <dl>
+
+
+                <dt class="discusstab">
+                    {% for item in discuss_tar %}
+                    {% if item.id == current_grade %}
+                     <a class="current" href="?page=1&amp;grade={{ item.id }}">{{ item.name }}</a>
+                    {% else %}
+                      <a class="" href="?page=1&amp;grade={{ item.id }}">{{ item.name }}</a>
+                    {% endif  %}
+                    {% endfor %}
+                </dt>
+                <br>
+                <dd class="discusstabcon">
+
+                    <div class="discusslist">
+                        <ul>
+                            {% for item in page.object_list %}
+
+                            <li class="cf">
+                                <div class="f-l dislpic"><a href="#"><img src="" width="48" height="48"
+                                                                          alt=""/></a><span></span>
+                                </div>
+                                <div class="f-l disrdis">
+                                    <div class="disdate">
+                                        <span class="f-l">{{ item.user.uname }}</span>
+                                        <span class="f-2">{{ item.time }}</span>
+                                        <span class="f-2">评论</span>
+                                        <span class="starpoint{{ item.grade }}"></span>
+                                    </div>
+                                    <div class="disinfo"><span class="f-l">评论：{{ item.content }}</span>
+                                        <div class="f-r withme">
+                                            <span class="f-l">这个评论对我</span>
+                                            <a onclick="addlike({{ item.pk }})">有用
+                                                <b class="red" id="like{{ item.pk }}">{{ item.likenum }}</b></a>
+                                            <a onclick="adddislike({{ item.pk }})">没用
+                                                <b class="red" id="dislike{{ item.pk }}">{{ item.dislikenum }}</b></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+
+{% if paginator.count > 0 %}
+                    <div class="afqpage">
+                        <div class="f-r pagination">
+                            {% if page.has_previous %}
+                            <a href="?page={{ page.previous_page_number }}">上一页</a>
+                            {% else %}
+                            <span class="disabled">上一页</span>
+                            {% endif %}
+
+
+                            {% if paginator.num_pages < 7 %}
+
+                            {% for index in paginator.page_range %}
+                            {% if index == page.number %}
+                            <span class="current">{{ index }}</span>
+                            {% else %}
+                            <a href="?page={{ index }}">{{ index }}</a>
+                            {% endif %}
+                            {% endfor %}
+                            {% else %}
+
+                            {% if page.number < 6 %}
+                            {% for index in range_page %}
+                            {% if index == page.number %}
+                            <span class="current">{{ index }}</span>
+                            {% else %}
+                            <a href="?page={{ index }}">{{ index }}</a>
+                            {% endif %}
+                            {% endfor %}
+                            <span class="disabled">...</span>
+                            <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                            {% else%}
+                            {% if page.number < pagenum %}
+
+                            <a href="?page=1">1</a>
+                            <a href="?page=2">2</a>
+                            <span class="disabled">...</span>
+                            {% for index in range_page2 %}
+                            {% if index == page.number %}
+                            <span class="current">{{ index }}</span>
+                            {% else %}
+                            <a href="?page={{ index }}">{{ index }}</a>
+                            {% endif %}
+                            {% endfor %}
+                            <span class="disabled">...</span>
+                            <a href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+
+                            {% else %}
+                            <a href="?page=1">1</a>
+                            <a href="?page=2">2</a>
+                            <span class="disabled">...</span>
+
+                            {% for index in range_page2 %}
+                            {% if index == page.number %}
+                            <span class="current">{{ index }}</span>
+                            {% else %}
+                            <a href="?page={{ index }}">{{ index }}</a>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% endif %}
+
+
+                            {% endif %}
+
+                            {% endif %}
+
+
+                            {% if page.has_next %}
+                            <a href="?page={{ page.next_page_number }}">下一页</a>
+                            {% else %}
+                            <span class="disabled">下一页</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+      {% endif %}
+
+                </dd>
+
+
+            </dl>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock user_body %}

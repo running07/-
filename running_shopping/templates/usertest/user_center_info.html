@@ -1,0 +1,71 @@
+{% extends 'base_user.html' %}
+{% block base_script %}
+<script type="text/javascript" src="/static/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src='/static/js/list.js'></script>
+
+
+{% endblock base_script %}
+
+
+
+{% block user_left %}
+
+<div class="left_menu_con clearfix">
+    <h3>用户中心</h3>
+    <ul>
+        <li><a href="{% url 'usertest:info' %}" class="active">· 个人信息</a></li>
+        <li><a href="{% url 'usertest:order' %}">· 全部订单</a></li>
+        <li><a href="{% url 'usertest:site' %}">· 收货地址</a></li>
+    </ul>
+</div>
+{% endblock user_left %}
+
+{% block user_right %}
+
+
+<div class="right_content clearfix">
+    {% load cache %}
+    {% cache 120 address %}
+    <div class="info_con clearfix">
+        <h3 class="common_title2">基本信息</h3>
+
+            <table class="user_info_list" >
+                <tr>
+                    <td><span>账号：</span>{{ user.uname }}</td>
+                    <td width="60%"><span>收件名：</span>{{ addressinfo.urecipients }}</td>
+                </tr>
+                <tr>
+                    <td><span>邮箱：</span>{{ user.umail }}</td>
+                    <td><span>手机号码：</span>{{ addressinfo.uaddphone }}</td>
+                </tr>
+                <tr>
+                    <td><span>邮编：</span>{{ addressinfo.upostcode }}</td>
+                    <td><span>收货地址：</span>{{ address }}</td>
+                </tr>
+            </table>
+
+    </div>
+    {% endcache %}
+    <h3 class="common_title2">最近浏览</h3>
+    <div class="has_view_list">
+        <ul class="goods_type_list clearfix">
+
+            {% for item in goods_list %}
+
+            <li>
+                <a href="/detail_{{ item.pk }}"><img src="/static/media/{{ item.gimage }}"></a>
+                <h4><a href="/detail_{{ item.pk }}">{{ item.gtitle }}</a></h4>
+                <div class="operate">
+                    <span class="prize">￥{{ item.gprice }}</span>
+                    <span class="unit">{{ item.gprice }}/{{ item.gweight }}</span>
+                    <a href="{% url 'carttest:addcart' item.pk 1 %}"  class="add_goods" title="加入购物车"></a>
+                </div>
+            </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+</div>
+
+
+{% endblock user_right %}

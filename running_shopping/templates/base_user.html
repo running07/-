@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block base_body %}
+
+{% block user_search %}
+
+<div class="search_bar clearfix">
+    <a href="/" class="logo fl"><img src="/static/images/logo.png"></a>
+    <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;{{ title|default:'用户中心' }}</div>
+    <div class="search_con fr">
+        <form method="get" action="/search/">
+            <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+            <input type="submit" class="input_btn fr" name="" value="搜索">
+        </form>
+    </div>
+</div>
+{% endblock user_search %}
+{% block user_body %}
+
+<div class="main_con clearfix">
+    {% block user_left %}
+
+    <div class="left_menu_con clearfix">
+        <h3>用户中心</h3>
+        <ul>
+            <li><a href="{% url 'usertest:info' %}">· 个人信息</a></li>
+            <li><a href="{% url 'usertest:order' %}" class="active">· 全部订单</a></li>
+            <li><a href="{% url 'usertest:site' %}">· 收货地址</a></li>
+        </ul>
+    </div>
+    {% endblock user_left %}
+    {% block user_right %}
+    {% endblock user_right %}
+</div>
+{% endblock user_body %}
+{% endblock base_body %}
+

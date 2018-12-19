@@ -1,0 +1,139 @@
+{% extends 'base_goods.html' %}
+{% block goods_script %}
+
+<script type="text/javascript" src="/static/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src='/static/js/list.js'></script>
+
+{% endblock goods_script %}
+{% block user_body %}
+
+
+<div class="breadcrumb">
+    <a href="{% url 'goodstest:index' %}">全部分类</a>
+    <span>></span>
+    <a href="">{{ title }}</a>
+</div>
+
+<div class="main_wrap clearfix">
+    <div class="l_wrap fl clearfix">
+        <div class="new_goods">
+            <h3>热门商品</h3>
+            <ul>
+                {% for item in latest_type %}
+                <li>
+                    <a href="/detail_{{ item.pk }}"><img  src="/static/media/{{ item.gimage }}" title="{{ item.gtitle }}" ></a>
+                    <h4><a href="/detail_{{ item.pk }}">{{ item.gtitle }}</a></h4>
+                    <div class="prize">￥{{ item.gprice }}</div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="r_wrap fr clearfix">
+        <div class="sort_bar">
+            {% for item in sort_bar %}
+            {% if rank == item.id %}
+            <a href="/list_{{ type }}?rank={{ item.id }}" class="active">{{ item.name }} </a>
+            {% else %}
+            <a href="/list_{{ type }}?rank={{ item.id }}">{{ item.name }}</a>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <ul class="goods_type_list clearfix">
+
+            {% for item in page.object_list %}
+            <li>
+                <a href="/detail_{{ item.pk }}"><img src="/static/media/{{ item.gimage }}" title="{{ item.gtitle }}" ></a>
+                <h4><a href="/detail_{{ item.pk }}">{{ item.gtitle }}</a></h4>
+                <div class="operate">
+                    <span class="prize">￥{{ item.gprice }}</span>
+                    <span class="unit">{{ item.gprice }}/{{ item.gweight }}</span>
+                    <a  href="{% url 'carttest:addcart' item.pk 1 %}" class="add_goods" title="加入购物车"></a>
+                </div>
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        <div class="pagenation">
+            {% if page.has_previous %}
+            <a href="/list_{{ type }}?page={{ page.previous_page_number }}&amp;rank={{ rank }}">上一页</a>
+            {% else %}
+            <a href="#" class="active2">上一页</a>
+            {% endif %}
+
+
+            {% if paginator.num_pages < 7 %}
+
+                {% for index in paginator.page_range %}
+                {% if index == page.number %}
+                <a href="#" class="active">{{ index }}</a>
+                {% else %}
+                <a href="/list_{{ type }}?page={{ index }}&amp;rank={{ rank }}">{{ index }}</a>
+                {% endif %}
+                {% endfor %}
+            {% else %}
+
+                {% if page.number < 6 %}
+                    {% for index in range_page %}
+                        {% if index == page.number %}
+                        <a href="#" class="active">{{ index }}</a>
+                        {% else %}
+                        <a href="/list_{{ type }}?page={{ index }}&amp;rank={{ rank }}">{{ index }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    <a href="#" class="active2">...</a>
+                    <a href="/list_{{ type }}?page={{ paginator.num_pages }}&amp;rank={{ rank }}">{{ paginator.num_pages }}</a>
+                {% else%}
+                    {% if page.number < pagenum %}
+
+                        <a href="/list_{{ type }}?page=1&amp;rank={{ rank }}">1</a>
+                        <a href="/list_{{ type }}?page=2&amp;rank={{ rank }}">2</a>
+                        <a href="#" class="active2">...</a>
+                        {% for index in range_page2 %}
+                                {% if index == page.number %}
+                                <a href="#" class="active">{{ index }}</a>
+                                {% else %}
+                                <a href="/list_{{ type }}?page={{ index }}&amp;rank={{ rank }}">{{ index }}</a>
+                                {% endif %}
+                        {% endfor %}
+                        <a href="#" class="active">...</a>
+                        <a href="/list_{{ type }}?page={{ paginator.num_pages }}&amp;rank={{ rank }}">{{ paginator.num_pages }}</a>
+
+                    {% else %}
+                        <a href="/list_{{ type }}?page=1&amp;rank={{ rank }}">1</a>
+                        <a href="/list_{{ type }}?page=2&amp;rank={{ rank }}">2</a>
+                        <a href="#" class="active2">...</a>
+
+                        {% for index in range_page2 %}
+                                {% if index == page.number %}
+                                <a href="#" class="active">{{ index }}</a>
+                                {% else %}
+                                <a href="/list_{{ type }}?page={{ index }}&amp;rank={{ rank }}">{{ index }}</a>
+                                {% endif %}
+                        {% endfor %}
+
+                    {% endif %}
+
+
+
+
+                {% endif %}
+
+            {% endif %}
+
+
+            {% if page.has_next %}
+            <a href="/list_{{ type }}?page={{ page.next_page_number }}&amp;rank={{ rank }}">下一页</a>
+            {% else %}
+            <a href="#" class="active2">下一页</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock user_body %}

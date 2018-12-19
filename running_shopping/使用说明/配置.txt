@@ -1,0 +1,37 @@
+指定版本安装django 环境
+virtualenv -p 路径 django
+安装django
+pip install django==1.8.2
+需要安装的模块 plist.txt
+安装模块
+pip install -r plist.txt
+
+
+
+创建项目
+django-admin startproject runnig_shopping
+创建应用
+python manage.py startapp booktest
+创建用户
+python manage.py createsuperuser
+开启服务器   默认端口号8000
+python manage.py runserver ip:port
+
+
+
+生成迁移文件：根据模型类生成sql语句
+python manage.py makemigrations
+执行迁移：执行sql语句生成数据表
+python manage.py migrate
+生成索引
+python manage.py rebuild_index
+
+
+
+开启redis服务器
+redis-server.exe redis.windows.conf
+导入数据
+登录mysql mysql -u root -p
+create database shopping charset=utf8;
+source shopping.sql
+
